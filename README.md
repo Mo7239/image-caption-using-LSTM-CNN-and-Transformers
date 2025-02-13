@@ -102,7 +102,7 @@ context_vector = tf.keras.layers.Flatten()(context_vector)
 decoder1 = Concatenate()([context_vector, fe2])
 decoder2 = Dense(512, activation='relu')(decoder1)
 outputs = Dense(vocab_size, activation='softmax')(decoder2)
-   
+```   
 ## Results
 
 - **Sample Captions**:
