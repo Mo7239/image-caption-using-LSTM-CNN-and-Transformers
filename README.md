@@ -10,7 +10,7 @@ This project focuses on generating captions for images using deep learning techn
 5. [Model Architecture](#model-architecture)
 6. [Results](#results)
 7. [License](#license)
-
+8. [Contact](#Contact)
 ---
 
 ## Project Overview
@@ -74,5 +74,49 @@ The goal of this project is to generate meaningful captions for images using a c
      plt.show()
      ```
 
+## Model Architecture
 
+The custom model architecture consists of:
+- **Image Feature Extraction**: MobileNetV3Large.
+- **Text Processing**: Embedding layer followed by Bidirectional LSTM.
+- **Attention Mechanism**: Dot-product attention to focus on relevant parts of the image and text.
+- **Decoder**: Dense layers to generate the final caption.
+
+```python
+inputs1 = Input(shape=(1000,),name='image')  
+fe1 = BatchNormalization()(inputs1)
+fe2 = Dense(512, activation='relu')(fe1)
+fe2_projected = RepeatVector(max_length)(fe2)
+
+inputs2 = Input(shape=(max_length,), name='text')
+se1 = Embedding(vocab_size, 256, mask_zero=True)(inputs2)
+se2 = BatchNormalization()(se1)
+se3 = Bidirectional(LSTM(256, return_sequences=True))(se2)
+
+attention = Dot(axes=[2, 2])([fe2_projected, se3])
+attention = Activation('softmax')(attention)
+context_vector = Dot(axes=[1, 1])([attention, se3])
+context_vector = BatchNormalization()(context_vector)
+
+context_vector = tf.keras.layers.Flatten()(context_vector)
+decoder1 = Concatenate()([context_vector, fe2])
+decoder2 = Dense(512, activation='relu')(decoder1)
+outputs = Dense(vocab_size, activation='softmax')(decoder2)
    
+## Results
+
+- **Sample Captions**:
+  - Generated captions are displayed alongside images.
+  - Captions are converted to audio using gTTS.
+
+- **Word Cloud**:
+  - Visualizes the most frequent words in the dataset.
+
+## Acknowledgments
+
+- [MobileNetV3Large](https://arxiv.org/abs/1905.02244) for image feature extraction.
+- [BLIP](https://arxiv.org/abs/2201.12086) for advanced caption generation.
+- [gTTS](https://gtts.readthedocs.io/) for text-to-speech functionality.
+
+## 📬 Contact  
+For any inquiries, feel free to reach out via [LinkedIn](https://www.linkedin.com/in/mohamed-wasef-789743233/)
