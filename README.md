@@ -9,8 +9,7 @@ This project focuses on generating captions for images using deep learning techn
 4. [Usage](#usage)
 5. [Model Architecture](#model-architecture)
 6. [Results](#results)
-7. [License](#license)
-8. [Contact](#Contact)
+7. [Contact](#contact)
 ---
 
 ## Project Overview
